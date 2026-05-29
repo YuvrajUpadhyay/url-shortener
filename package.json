@@ -1,0 +1,19 @@
+{
+  "name": "url-shortener",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monorepo root — run all services from here",
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "dev": "concurrently --kill-others-on-fail --names \"server,worker,client\" --prefix-colors \"cyan,yellow,magenta\" \"npm --prefix server run dev\" \"npm --prefix server run dev:worker\" \"npm --prefix client run dev\"",
+    "dev:server": "npm --prefix server run dev",
+    "dev:worker": "npm --prefix server run dev:worker",
+    "dev:client": "npm --prefix client run dev",
+    "start": "concurrently --names \"server,worker\" \"npm --prefix server start\" \"npm --prefix server run worker\"",
+    "build:client": "npm --prefix client run build",
+    "test:load": "cd load-tests && bash run_load_tests.sh"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
