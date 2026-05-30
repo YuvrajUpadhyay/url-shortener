@@ -4,6 +4,15 @@ A scalable URL shortener built with the MERN stack, featuring Redis caching, Rab
 
 ---
 
+## Live Demo
+
+- **Frontend:** https://url-shortener-g1or.onrender.com
+- **Backend API:** https://url-shortener-api-1asz.onrender.com
+- **Health Check:** https://url-shortener-api-1asz.onrender.com/health
+- **GitHub:** https://github.com/YuvrajUpadhyay/url-shortener
+
+---
+
 ## Architecture Overview
 
 ```
