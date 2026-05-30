@@ -71,7 +71,13 @@ const resolveUrl = async (shortCode, requestMeta) => {
   const cachedUrl = await getCachedUrl(shortCode);
 
   if (cachedUrl) {
-    publishClickEvent({ shortCode, ...requestMeta, cacheHit: true });
+    // Non-blocking direct writes — no worker needed
+    Click.create({ shortCode, ...requestMeta }).catch(err =>
+      console.error('[Analytics] Click insert failed:', err.message)
+    );
+    Url.updateOne({ shortCode }, { $inc: { clicks: 1 } }).catch(err =>
+      console.error('[Analytics] Click increment failed:', err.message)
+    );
     return cachedUrl;
   }
 
@@ -89,10 +95,15 @@ const resolveUrl = async (shortCode, requestMeta) => {
     ? Math.floor((urlDoc.expiresAt.getTime() - Date.now()) / 1000)
     : undefined;
 
-  // Populate cache so subsequent requests hit Redis, not MongoDB
   await setCachedUrl(shortCode, urlDoc.originalUrl, cacheTtl);
 
-  publishClickEvent({ shortCode, ...requestMeta, cacheHit: false });
+  // Non-blocking direct writes
+  Click.create({ shortCode, ...requestMeta }).catch(err =>
+    console.error('[Analytics] Click insert failed:', err.message)
+  );
+  Url.updateOne({ shortCode }, { $inc: { clicks: 1 } }).catch(err =>
+    console.error('[Analytics] Click increment failed:', err.message)
+  );
 
   return urlDoc.originalUrl;
 };
