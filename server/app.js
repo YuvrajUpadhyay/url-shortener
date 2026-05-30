@@ -15,7 +15,7 @@ app.set('trust proxy', 1); // Required for correct req.ip behind reverse proxies
 app.use(
   cors({
     origin: process.env.CLIENT_URL || '*',
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST','DELETE'],
     allowedHeaders: ['Content-Type'],
   })
 );
